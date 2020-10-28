@@ -134,7 +134,7 @@ namespace testface
             // 通过特征值比对
             // comp.test_compare_feature();
             // 1:N识别（通过传入图片文件路径和库里的比对)
-            comp.test_identify("G:\\Development\\Application\\testface\\img\\beckham\\1.jpg", "test_group", "test_user");
+            comp.test_identify("..\\..\\img\\xingye\\1.jpg", "test_group", "test_user");
             // 1:N识别（通过传入图片文件二进制buffer和库里的比对)
             //  comp.test_identify_by_buf();
             // 1:N识别（通过传入提取的人脸特征值feature和库里的比对)
@@ -207,6 +207,8 @@ namespace testface
             test_face_compare();
         // 测试人脸活体检测
         //test_face_liveness();
+
+
         long t_end = TimeUtil.get_time_stamp();
             Console.WriteLine("time cost is:"+(t_end-t_begin));
           

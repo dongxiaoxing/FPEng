@@ -346,3 +346,39 @@ Sat Jun 20 17:08:36 2020:in sdk init create_db
 
 Sat Jun 20 17:08:36 2020:out BaiduFaceApi::sdk_init and init success
 
+Thu Oct 15 15:20:00 2020:license key is:XXXX-6CJH-UNDZ-XSNR
+
+Thu Oct 15 15:20:00 2020:license file path is:C:\Users\dxn1szh\Source\Repos\FPEng\testface\bin\x64\license.ini
+
+Thu Oct 15 15:20:00 2020:auth result in dll is success
+
+Thu Oct 15 15:20:00 2020:db path is:C:\Users\dxn1szh\Source\Repos\FPEng\testface\bin\x64\db\face.db and db already exist
+
+Thu Oct 15 15:20:00 2020:in sdk init create_db
+
+Thu Oct 15 15:20:00 2020:out BaiduFaceApi::sdk_init and init success
+
+Thu Oct 15 15:20:07 2020:license key is:XXXX-6CJH-UNDZ-XSNR
+
+Thu Oct 15 15:20:07 2020:license file path is:C:\Users\dxn1szh\Source\Repos\FPEng\testface\bin\x64\license.ini
+
+Thu Oct 15 15:20:07 2020:auth result in dll is success
+
+Thu Oct 15 15:20:07 2020:db path is:C:\Users\dxn1szh\Source\Repos\FPEng\testface\bin\x64\db\face.db and db already exist
+
+Thu Oct 15 15:20:07 2020:in sdk init create_db
+
+Thu Oct 15 15:20:07 2020:out BaiduFaceApi::sdk_init and init success
+
+Thu Oct 15 15:20:23 2020:license key is:XXXX-6CJH-UNDZ-XSNR
+
+Thu Oct 15 15:20:23 2020:license file path is:C:\Users\dxn1szh\Source\Repos\FPEng\testface\bin\x64\license.ini
+
+Thu Oct 15 15:20:23 2020:auth result in dll is success
+
+Thu Oct 15 15:20:23 2020:db path is:C:\Users\dxn1szh\Source\Repos\FPEng\testface\bin\x64\db\face.db and db already exist
+
+Thu Oct 15 15:20:23 2020:in sdk init create_db
+
+Thu Oct 15 15:20:23 2020:out BaiduFaceApi::sdk_init and init success
+

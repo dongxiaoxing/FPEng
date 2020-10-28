@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -50,5 +51,17 @@ namespace Face.Web.Core.Models
             public string UserInfo { get; set; }
             public string FilePath { get; set; }
         }
-    }
+
+        public class UploadModel
+        {
+            public string UserId { get; set; }
+            public string GroupId { get; set; }
+            public IFormFile Image { get; set; } 
+        }
+        public class VerifyModel 
+        {
+            public string UserId { get; set; }
+            public string GroupId { get; set; }
+            public IFormFile Image { get; set; } 
+        }}
 }

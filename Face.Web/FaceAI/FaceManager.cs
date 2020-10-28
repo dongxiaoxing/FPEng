@@ -80,7 +80,7 @@ namespace Face.Web.Core.FaceAI
             // 人脸注册
             string user_id = "test_user";
             string group_id = "test_group";
-            string file_name = "G:\\Development\\Application\\testface\\img\\beckham\\2.jpg";
+            string file_name = "..\\..img\\xingye\\2.jpg";
             string user_info = "user_info";
             IntPtr ptr = user_add(user_id, group_id, file_name, user_info);
             string buf = Marshal.PtrToStringAnsi(ptr);
@@ -109,7 +109,7 @@ namespace Face.Web.Core.FaceAI
             // 人脸注册
             string user_id = "test_user";
             string group_id = "test_group";
-            System.Drawing.Image img = System.Drawing.Image.FromFile("G:\\Development\\Application\\testface\\img\\beckham\\4.jpg");
+            System.Drawing.Image img = System.Drawing.Image.FromFile("..\\..img\\xingye\\4.jpg");
             byte[] img_bytes = ImageUtil.img2byte(img);
             string user_info = "user_info";
             IntPtr ptr = user_add_by_buf(user_id, group_id, img_bytes, img_bytes.Length, user_info);
@@ -173,7 +173,7 @@ namespace Face.Web.Core.FaceAI
         {
             string user_id = "test_user";
             string group_id = "test_group";
-            string file_name = "G:\\Development\\Application\\testface\\img\\beckham\\4.jpg";
+            string file_name = "..\\..img\\xingye\\4.jpg";
             string user_info = "user_info";
             IntPtr ptr = user_update(user_id, group_id, file_name, user_info);
             string buf = Marshal.PtrToStringAnsi(ptr);
@@ -201,7 +201,7 @@ namespace Face.Web.Core.FaceAI
             // 人脸更新
             string user_id = "test_user";
             string group_id = "test_group";
-            System.Drawing.Image img = System.Drawing.Image.FromFile("G:\\Development\\Application\\testface\\img\\beckham\\8.jpg");
+            System.Drawing.Image img = System.Drawing.Image.FromFile("..\\..img\\xingye\\8.jpg");
             byte[] img_bytes = ImageUtil.img2byte(img);
             string user_info = "user_info";
             IntPtr ptr = user_update_by_buf(user_id, group_id, img_bytes, img_bytes.Length, user_info);

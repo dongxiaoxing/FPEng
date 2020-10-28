@@ -2,7 +2,215 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="wrapper">
+
+    <div class="app-title">
+        <p>人脸识别</p>
+    </div>
+
+    <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="pills-upload-tab" data-toggle="pill" href="#pills-upload" role="tab" aria-controls="pills-upload" aria-selected="true">注册</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-verify-tab" data-toggle="pill" href="#pills-verify" role="tab" aria-controls="pills-verify" aria-selected="false">识别</a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-upload" role="tabpanel" aria-labelledby="pills-upload-tab">
+            <!-- core part for image upload to add image to kairo gallery -->
+            <div class="row">
+                <div class="col-md-6">
+                    <form enctype="multipart/form-data" v-on:submit.prevent="onSubmit">
+                        <div class="form-group">
+                            <label for="">名字:</label>
+                            <input type="text" required class="form-control" placeholder="小明" name="subject_name" v-model="model.name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">群组:</label>
+                            <input type="text" required class="form-control" placeholder="BOSCH" name="subject_name" v-model="model.group">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">头像:</label>
+                            <input type="file" class="form-control" accept="image/*" name="image" v-on:change="upload($event.target.files)">
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary">上传</button>
+                            {{ loading }}
+                            {{ uploadStatus }}
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-6">
+                    <p style="text-align:center;">图像预览</p>
+                    <div class="col-md-6" style="text-align:center;">
+                        <img id="face_preview1" class="img-responsive" alt="" width="200" height="200">
+                        <p style="text-align:center;">{{ model.name }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-verify" role="tabpanel" aria-labelledby="pills-verify-tab">
+            <!-- core part for image upload to verify -->
+            <div class="row">
+                <div class="col-md-6">
+                    <form enctype="multipart/form-data" v-on:submit.prevent="onSubmit">
+                        <div class="form-group">
+                            <label for="">名字:</label>
+                            <input type="text" required class="form-control" placeholder="小明" name="subject_name" v-model="model.name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">群组:</label>
+                            <input type="text" required class="form-control" placeholder="BOSCH" name="subject_name" v-model="model.group">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">上传需要识别的头像图片：</label>
+                            <input type="file" class="form-control" accept="image/*" name="image" v-on:change="upload($event.target.files)">
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary">识别</button>
+                            <span class="fa fa-spin fa-spinner" id="verify_spinner" style="display:none;" aria-hidden="true"></span>
+                            {{ loading }}
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-6">
+                    <p style="text-align:center;">图像预览</p>
+                    <div class="col-md-6" style="text-align:center;">
+                        <img id="face_preview2" class="img-responsive" alt="" width="200" height="200">
+                        <p style="text-align:center;">{{ resultStatus }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+<style>
+    .wrapper {
+        padding-top: 20px;
+    }
+
+    .app-title {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+</style>
+
+<script>
+    var upload = new Vue({
+        el: '#pills-upload',
+        data: function () {
+            return {
+                model: {
+                    name: '小明',
+                    image: null,
+                    item: '',
+                    group:'BOSCH'
+                },
+                loading: '',
+                uploadStatus: '',
+            }
+        },
+        methods: {
+            upload: function (files) {
+                this.model.image = files[0];
+                this.uploadStatus = '';
+                this.showPreview(files[0]);
+            },
+            showPreview: function (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("face_preview1").src = e.target.result;
+                };
+                // read the image file as a data URL.
+                reader.readAsDataURL(file);
+            },
+            onSubmit: function () {
+                // Assemble form data
+                const formData = new FormData()
+                formData.append('Image', this.model.image);
+                formData.append('UserId', this.model.name);
+                formData.append('GroupId', this.model.group);
+                this.loading = "上传头像中，请稍等."
+                // Post to server
+                axios.post('http://localhost:51846/api/Face/Upload', formData)
+                    .then(res => {
+                        // Post a status message
+                        this.loading = '';
+                        this.uploadStatus = res.data.msg;
+                    })
+            }
+        }
+    })
+
+    var verify = new Vue({
+        el: '#pills-verify',
+        data: function () {
+            return {
+                model: {
+                    image: null,
+                    group: 'BOSCH',
+                    name:''
+                },
+                loading: '',
+                resultStatus: '',
+                resultDetails: '',
+            }
+        },
+        methods: {
+            upload: function (files) {
+                this.model.image = files[0];
+                this.resultStatus = '';
+                this.showPreview(files[0]);
+            },
+            showPreview: function (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("face_preview2").src = e.target.result;
+                };
+                // read the image file as a data URL.
+                reader.readAsDataURL(file);
+            },
+            onSubmit: function () {
+                // Assemble form data
+                const formData = new FormData()
+                formData.append('Image', this.model.image);
+                formData.append('UserId', this.model.name);
+                formData.append('GroupId', this.model.group);
+                this.loading = "头像识别中，请稍等."
+                // Post to server
+                axios.post('http://localhost:51846/api/Face/Verify', formData)
+                    .then(res => {
+                        // Post a status message saying the upload complete
+                        this.loading = '';
+                        console.log(res);
+                        if (!res.data.Errors) {
+                            if (res.data.images[0].transaction.status != "success") {
+                                this.resultStatus = '😕 don\'t know who you are! Try uploading a picture of yourself first in upload section';
+                            } else {
+                                this.resultStatus = 'What\'s good ' + res.data.images[1].transaction.subject_id + '! 🤓';
+                            }
+                            this.resultDetails = res.data.images[0].transaction;
+                        } else {
+                            this.resultStatus = '😕 don\'t know who you are! Try uploading a picture first in upload section';
+                        }
+                    })
+            }
+        }
+    })
+</script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>

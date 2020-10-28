@@ -78,7 +78,7 @@ namespace Face.Web.Core.Controllers
                 string groupId = userAdd.GroupId == null ? "test_group" : userAdd.GroupId;
                 string fileName = userAdd.FileName == null ? Guid.NewGuid().ToString("N") : userAdd.FileName;
                 string userInfo = userAdd.UserInfo == null ? "test_user" : value.UserInfo;
-                string filePath = userAdd.FilePath == null ? "G:\\Development\\Application\\testface\\img\\beckham\\2.jpg" : userAdd.FilePath;
+                string filePath = userAdd.FilePath == null ? "..\\..img\\xingye\\2.jpg" : userAdd.FilePath;
 
                 // post add user
                 if (type == "add")
@@ -116,7 +116,7 @@ namespace Face.Web.Core.Controllers
                 string groupId = userAdd.GroupId == null ? "test_group" : userAdd.GroupId;
                 string fileName = userAdd.FileName == null ? Guid.NewGuid().ToString("N") : userAdd.FileName;
                 string userInfo = userAdd.UserInfo == null ? "test_user" : value.UserInfo;
-                string filePath = userAdd.FilePath == null ? "G:\\Development\\Application\\testface\\img\\beckham\\2.jpg" : userAdd.FilePath;
+                string filePath = userAdd.FilePath == null ? "..\\..img\\xingye\\2.jpg" : userAdd.FilePath;
 
                 // post add user
                 if (type == "add")
@@ -158,5 +158,5 @@ namespace Face.Web.Core.Controllers
             var result = _faceUtil._faceManager.UserDelete(userid, groupid);
             Console.WriteLine("deleteFace", result);
         }
-    }
+    } 
 }

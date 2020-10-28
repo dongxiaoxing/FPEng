@@ -79,7 +79,7 @@ namespace Face.App
         public void test_get_face_feature()
         {
             byte[] fea = new byte[2048];
-            string file_name = "G:\\Development\\Application\\testface\\img\\beckham\\2.jpg";
+            string file_name = "..\\..img\\xingye\\2.jpg";
             int len = 0;
             IntPtr ptr = get_face_feature(file_name, ref len);
             if(ptr==IntPtr.Zero)
@@ -93,7 +93,7 @@ namespace Face.App
                     Console.WriteLine("get face feature success");
                     Marshal.Copy(ptr, fea, 0, 2048);
                     // 可保存特征值2048个字节的fea到文件中
-                   // FileUtil.byte2file("G:\\Development\\Application\\testface\\img\\beckham\\fea1.txt",fea, 2048);
+                   // FileUtil.byte2file("..\\..img\\xingye\\fea1.txt",fea, 2048);
                 }
                 else
                 {
@@ -111,7 +111,7 @@ namespace Face.App
             try
             {
                 byte[] fea = new byte[2048];
-                string file_name = fileName == null ? fileName : "G:\\Development\\Application\\testface\\img\\beckham\\2.jpg";
+                string file_name = fileName == null ? fileName : "..\\..img\\xingye\\2.jpg";
                 int len = 0;
                 IntPtr ptr = get_face_feature(file_name, ref len);
                 if (ptr == IntPtr.Zero)
@@ -127,7 +127,7 @@ namespace Face.App
                         Marshal.Copy(ptr, fea, 0, 2048);
                         return fea.ToString();
                         // 可保存特征值2048个字节的fea到文件中
-                        // FileUtil.byte2file("G:\\Development\\Application\\testface\\img\\beckham\\fea1.txt",fea, 2048);
+                        // FileUtil.byte2file("..\\..img\\xingye\\fea1.txt",fea, 2048);
                     }
                     else
                     {
@@ -164,7 +164,7 @@ namespace Face.App
                     result = ("get face feature success");
                     Marshal.Copy(ptr, fea, 0, 2048);
                     // 可保存特征值2048个字节的fea到文件中
-                    // FileUtil.byte2file("G:\\Development\\Application\\testface\\img\\beckham\\fea1.txt",fea, 2048);
+                    // FileUtil.byte2file("..\\..img\\xingye\\fea1.txt",fea, 2048);
                 }
                 else
                 {
@@ -179,7 +179,7 @@ namespace Face.App
         public void test_get_face_feature_by_buf()
         {
             byte[] fea = new byte[2048];
-            System.Drawing.Image img = System.Drawing.Image.FromFile("G:\\Development\\Application\\testface\\img\\beckham\\2.jpg");
+            System.Drawing.Image img = System.Drawing.Image.FromFile("..\\..img\\xingye\\2.jpg");
             byte[] img_bytes = ImageUtil.img2byte(img);
             int len = 0;
             IntPtr ptr = get_face_feature_by_buf(img_bytes, img_bytes.Length, ref len);
@@ -194,7 +194,7 @@ namespace Face.App
                     Console.WriteLine("get face feature success");
                     Marshal.Copy(ptr, fea, 0, 2048);
                     // 可保存特征值2048个字节的fea到文件中
-                    //  FileUtil.byte2file("G:\\Development\\Application\\testface\\img\\beckham\\fea2.txt",fea, 2048);
+                    //  FileUtil.byte2file("..\\..img\\xingye\\fea2.txt",fea, 2048);
                 }
                 else
                 {
@@ -227,7 +227,7 @@ namespace Face.App
                     result = ("get face feature success");
                     Marshal.Copy(ptr, fea, 0, 2048);
                     // 可保存特征值2048个字节的fea到文件中
-                    //  FileUtil.byte2file("G:\\Development\\Application\\testface\\img\\beckham\\fea2.txt",fea, 2048);
+                    //  FileUtil.byte2file("..\\..img\\xingye\\fea2.txt",fea, 2048);
                 }
                 else
                 {
@@ -239,8 +239,8 @@ namespace Face.App
         // 测试1:1比较，传入图片文件路径
         public void test_match()
         {
-            string file1 = "G:\\Development\\Application\\testface\\img\\beckham\\1.jpg";
-            string file2 = "G:\\Development\\Application\\testface\\img\\beckham\\9.jpg";
+            string file1 = "..\\..img\\xingye\\1.jpg";
+            string file2 = "..\\..img\\xingye\\9.jpg";
             IntPtr ptr = match(file1, file2);
             string buf = Marshal.PtrToStringAnsi(ptr);
             Console.WriteLine("match res is:" + buf);
@@ -317,7 +317,7 @@ namespace Face.App
         {
             // 获取特征值2048个字节
             byte[] fea = new byte[2048];
-            string file_name = "G:\\Development\\Application\\testface\\img\\beckham\\2.jpg";
+            string file_name = "..\\..img\\xingye\\2.jpg";
             int len = 0;
             IntPtr ptr = get_face_feature(file_name, ref len);
             if( len!=2048)
@@ -327,7 +327,7 @@ namespace Face.App
             }
             Marshal.Copy(ptr, fea, 0, 2048);
             // 获取图片二进制buffer
-            System.Drawing.Image img2 = System.Drawing.Image.FromFile("G:\\Development\\Application\\testface\\img\\beckham\\8.jpg");
+            System.Drawing.Image img2 = System.Drawing.Image.FromFile("..\\..img\\xingye\\8.jpg");
             byte[] img_bytes2 = ImageUtil.img2byte(img2);
 
             IntPtr ptr_res = match_by_feature(fea, fea.Length, img_bytes2, img_bytes2.Length);
@@ -365,7 +365,7 @@ namespace Face.App
         // 测试1:N比较，传入图片文件路径
         public /*void*/string test_identify(string str, string usr_grp, string usr_id)
         {
-            string file1 = str;//"G:\\Development\\Application\\testface\\img\\beckham\\6.jpg";
+            string file1 = str;//"..\\..img\\xingye\\6.jpg";
             string user_group = usr_grp;//"test_group";
             string user_id = usr_id;//"test_user";
             IntPtr ptr = identify(file1, user_group, user_id);
@@ -392,7 +392,7 @@ namespace Face.App
         // 测试1:N比较，传入图片文件二进制buffer
         public void test_identify_by_buf(string str, string usr_grp, string usr_id)
         {
-            System.Drawing.Image img = System.Drawing.Image.FromFile(str);//"G:\\Development\\Application\\testface\\img\\beckham\\2.jpg");
+            System.Drawing.Image img = System.Drawing.Image.FromFile(str);//"..\\..img\\xingye\\2.jpg");
             byte[] img_bytes = ImageUtil.img2byte(img);
 
             string user_group = usr_grp;//"test_group";
@@ -425,7 +425,7 @@ namespace Face.App
         {
             // 获取特征值2048个字节
             byte[] fea = new byte[2048];
-            string file_name = "G:\\Development\\Application\\testface\\img\\beckham\\2.jpg";
+            string file_name = "..\\..img\\xingye\\2.jpg";
             int len = 0;
             IntPtr ptr = get_face_feature(file_name, ref len);
             if (len != 2048)
@@ -470,7 +470,7 @@ namespace Face.App
         {
             // 获取特征值1   共2048个字节
             byte[] fea1 = new byte[2048];
-            string file_name1 = "G:\\Development\\Application\\testface\\img\\beckham\\2.jpg";
+            string file_name1 = "..\\..img\\xingye\\2.jpg";
             int len1 = 0;
             IntPtr ptr1 = get_face_feature(file_name1, ref len1);
             if (len1 != 2048)
@@ -482,7 +482,7 @@ namespace Face.App
 
             // 获取特征值2   共2048个字节
             byte[] fea2 = new byte[2048];
-            string file_name2 = "G:\\Development\\Application\\testface\\img\\beckham\\8.jpg";
+            string file_name2 = "..\\..img\\xingye\\8.jpg";
             int len2 = 0;
             IntPtr ptr2 = get_face_feature(file_name2, ref len2);
             if (len2 != 2048)
@@ -535,7 +535,7 @@ namespace Face.App
             load_db_face();
             // 获取特征值2048个字节
             byte[] fea = new byte[2048];
-            string file_name = "G:\\Development\\Application\\testface\\img\\beckham\\2.jpg";
+            string file_name = "..\\..img\\xingye\\2.jpg";
             int len = 0;
             IntPtr ptr = get_face_feature(file_name, ref len);
             if (len != 2048)
@@ -580,7 +580,7 @@ namespace Face.App
             // 加载整个数据库到内存中
             load_db_face();
             // 1:N
-            string file1 = "G:\\Development\\Application\\testface\\img\\beckham\\3.jpg";
+            string file1 = "..\\..img\\xingye\\3.jpg";
             IntPtr ptr = identify_with_all(file1);
             string buf = Marshal.PtrToStringAnsi(ptr);
             Console.WriteLine("identify_with_all res is:" + buf);
@@ -606,7 +606,7 @@ namespace Face.App
             // 加载整个数据库到内存中
             load_db_face();
             // 1:N
-            System.Drawing.Image img = System.Drawing.Image.FromFile("G:\\Development\\Application\\testface\\img\\beckham\\4.jpg");
+            System.Drawing.Image img = System.Drawing.Image.FromFile("..\\..img\\xingye\\4.jpg");
             byte[] img_bytes = ImageUtil.img2byte(img);
             
             IntPtr ptr = identify_by_buf_with_all(img_bytes, img_bytes.Length);

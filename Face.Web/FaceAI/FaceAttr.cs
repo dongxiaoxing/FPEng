@@ -23,7 +23,7 @@ namespace Face.Web.Core.FaceAI
         public string test_get_face_attr()
         {
             // 传入图片文件绝对路径
-            IntPtr ptr = face_attr("G:\\Development\\Application\\testface\\img\\beckham\\2.jpg");
+            IntPtr ptr = face_attr("..\\..img\\xingye\\2.jpg");
             string buf = Marshal.PtrToStringAnsi(ptr);
             Console.WriteLine("attr res is:" + buf);
             return buf;
@@ -45,7 +45,7 @@ namespace Face.Web.Core.FaceAI
         // 测试获取人脸属性(传入图片文件的二进制buffer）
         public void test_get_face_attr_by_buf()
         {
-            System.Drawing.Image img = System.Drawing.Image.FromFile("G:\\Development\\Application\\testface\\img\\beckham\\2.jpg");
+            System.Drawing.Image img = System.Drawing.Image.FromFile("..\\..img\\xingye\\2.jpg");
             byte[] img_bytes = ImageUtil.img2byte(img);
 
             IntPtr ptr = face_attr_by_buf(img_bytes, img_bytes.Length);
@@ -69,7 +69,7 @@ namespace Face.Web.Core.FaceAI
         // 人脸属性（传入opencv视频帧）
         public void test_get_face_attr_by_mat()
         {
-            Mat img = Cv2.ImRead("G:\\Development\\Application\\testface\\img\\beckham\\1.jpg");
+            Mat img = Cv2.ImRead("..\\..img\\xingye\\1.jpg");
             IntPtr ptr = face_attr_by_mat(img.CvPtr);
             string buf = Marshal.PtrToStringAnsi(ptr);
             Console.WriteLine("attr res is:" + buf);
@@ -90,7 +90,7 @@ namespace Face.Web.Core.FaceAI
         // 人脸特性（传入opencv视频帧及检测到的人脸信息，适应于多人脸)
         public void test_get_face_attr_by_face()
         {
-            Mat img = Cv2.ImRead("G:\\Development\\Application\\testface\\img\\beckham\\1.jpg");
+            Mat img = Cv2.ImRead("..\\..img\\xingye\\1.jpg");
 
             int ilen = 1;//传入的人脸数
             TrackFaceInfo track_info = new TrackFaceInfo();

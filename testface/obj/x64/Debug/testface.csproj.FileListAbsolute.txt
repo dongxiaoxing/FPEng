@@ -12,3 +12,10 @@ G:\Development\Application\testface\testface\testface\obj\x64\Debug\testface.csp
 G:\Development\Application\testface\testface\testface\obj\x64\Debug\testface.csproj.CoreCompileInputs.cache
 G:\Development\Application\testface\testface\testface\obj\x64\Debug\testface.exe
 G:\Development\Application\testface\testface\testface\obj\x64\Debug\testface.pdb
+C:\Users\dxn1szh\source\repos\FPEng\testface\bin\x64\Debug\testface.exe.config
+C:\Users\dxn1szh\source\repos\FPEng\testface\bin\x64\Debug\testface.exe
+C:\Users\dxn1szh\source\repos\FPEng\testface\bin\x64\Debug\testface.pdb
+C:\Users\dxn1szh\source\repos\FPEng\testface\obj\x64\Debug\testface.csprojAssemblyReference.cache
+C:\Users\dxn1szh\source\repos\FPEng\testface\obj\x64\Debug\testface.csproj.CoreCompileInputs.cache
+C:\Users\dxn1szh\source\repos\FPEng\testface\obj\x64\Debug\testface.exe
+C:\Users\dxn1szh\source\repos\FPEng\testface\obj\x64\Debug\testface.pdb

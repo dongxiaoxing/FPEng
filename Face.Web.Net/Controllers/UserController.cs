@@ -72,7 +72,7 @@ namespace Face.Web.Net.Controllers
             string groupId = "test";
             string fileName = value.FileName;
             string userInfo = value.UserInfo == null ? "test user" : value.UserInfo;
-            string filePath = value.FilePath == null ? "G:\\Development\\Application\\testface\\img\\beckham\\2.jpg" : value.FilePath;
+            string filePath = value.FilePath == null ? "..\\..img\\xingye\\2.jpg" : value.FilePath;
 
             // post add user
             if (type == "add")

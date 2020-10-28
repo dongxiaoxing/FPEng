@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Dapper;
 using Face.Web.Core.FaceAI;
 using Face.Web.Core.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using static Face.Web.Core.Models.Models;
 
 namespace Face.Web.Core.Controllers
 {
@@ -67,13 +70,14 @@ namespace Face.Web.Core.Controllers
             switch (imageType)
             {
                 case "base64":
-                    // result = faceCompare.FaceIdentifyByBuffer(image,groupIdList,userId);
+                   // result = faceCompare.FaceIdentifyByBuffer(image,groupIdList,userId);
                     break;
                 case "url":
+                    userId = "";
                     result = faceCompare.FaceIdentify(image, groupIdList, userId);
                     break;
                 case "token":
-                    result = faceCompare.FaceIdentifyByFeature(image,groupIdList,userId);
+                    result = faceCompare.FaceIdentifyByFeature(image, groupIdList, userId);
                     break;
                 default:
                     break;
@@ -91,10 +95,10 @@ namespace Face.Web.Core.Controllers
         {
             try
             {
-               string result =  faceCompare.FaceIndentifyWithAll(file);
+                string result = faceCompare.FaceIndentifyWithAll(file);
                 return result;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw e;
             }
@@ -279,11 +283,11 @@ namespace Face.Web.Core.Controllers
         /// <returns></returns>
         [Route("FaceMatch")]
         [HttpPost]
-        public string FaceMatch(string file1,string file2)
+        public string FaceMatch(string file1, string file2)
         {
             try
             {
-                string result = faceCompare.FaceMatch(file1,file2);
+                string result = faceCompare.FaceMatch(file1, file2);
                 return result;
             }
             catch (Exception e)
@@ -343,11 +347,11 @@ namespace Face.Web.Core.Controllers
         // GET: api/Face/5
         [Route("GetUser")]
         [HttpGet]
-        public IActionResult GetUser(string user_id,string group_id)
+        public string GetUser(string user_id, string group_id)
         {
             try
             {
-                MySqlConnection mySqlConnection = new MySqlConnection(ConnString);
+                //MySqlConnection mySqlConnection = new MySqlConnection(ConnString);
                 dynamic data = new DynamicParameters();
                 //if (id != null)
                 //{
@@ -379,10 +383,10 @@ namespace Face.Web.Core.Controllers
         // POST: api/Face
         [Route("Add")]
         [HttpPost]
-        public string FaceAdd(string file,string user_id,string group_id,string user_info)
+        public string FaceAdd(string file, string user_id, string group_id, string user_info)
         {
             string rand = Guid.NewGuid().ToString().Substring(0, 8);
-            // string path = "G:\\Development\\Application\\testface\\img\\beckham\\" + file + ".jpg";
+            // string path = "..\\..img\\xingye\\" + file + ".jpg";
             // user_id = "beckham";
             // group_id = "beckham";
             string result = faceManager.UserAdd(user_id, group_id, file, rand); //G:\Development\Application\testface\img\beckham
@@ -401,7 +405,7 @@ namespace Face.Web.Core.Controllers
         public string FaceUpdate(string value, string user_id, string group_id,string user_info)
         {
             string rand = Guid.NewGuid().ToString().Substring(0, 8);
-            // string path = "G:\\Development\\Application\\testface\\img\\beckham\\" + value + ".jpg";
+            // string path = "..\\..img\\xingye\\" + value + ".jpg";
             string result = faceManager.UserUpdate(user_id, group_id, value, user_info); //G:\Development\Application\testface\img\beckham
             return result;
         }
@@ -497,6 +501,65 @@ namespace Face.Web.Core.Controllers
             {
                 throw e;
             }
+        }
+        /// <summary>
+        /// upload
+        /// </summary>
+        /// <param name="uploadData"></param>
+        /// Upload image to add user info  
+        [Route("Upload")]
+        [HttpPost]
+        public JObject Upload([FromForm] UploadModel uploadData)
+        {
+            var groupIdList = "BOSCH";
+            var userId = uploadData.UserId;
+            var image = uploadData.Image;
+            var filePath = Path.Combine("wwwroot/images/user", userId);
+
+            // Saving Image on Server
+            if (image.Length > 0)
+            {
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    image.CopyTo(fileStream);
+                }
+            }
+
+            string result = faceManager.UserAdd(userId, groupIdList, filePath); //G:\Development\Application\testface\img\beckham
+            var resultJson = JsonConvert.DeserializeObject<JObject>(result);
+            string msg = (string)resultJson["msg"];
+            JObject data = new JObject(new JProperty("msg",msg)); 
+            return data;
+        }
+        /// <summary>
+        /// verify 
+        /// </summary>
+        /// <param name="verifyData"></param>
+        /// Verify face image and return best fit user id 
+        [Route("Verify")]
+        [HttpPost]
+        public JObject Verify([FromForm] VerifyModel verifyData)
+        {
+            string groupId = verifyData.GroupId;
+            string userId = verifyData.UserId == null ? "":verifyData.UserId;
+            var image = verifyData.Image;
+            var filePath = Path.Combine("wwwroot/images/verify", verifyData.UserId == null ? "unkown":verifyData.UserId);
+
+            // Saving Image on Server
+            if (image.Length > 0)
+            {
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    image.CopyTo(fileStream);
+                }
+            }
+
+            string result = faceCompare.FaceIdentify(filePath, groupId,userId); //G:\Development\Application\testface\img\beckham
+            var resultJson = JsonConvert.DeserializeObject<JObject>(result);
+            string msg = (string)resultJson["msg"];
+            JObject data = new JObject(new JProperty("msg",msg),
+                                       new JProperty("data")); 
+            return data;
         }
     }
 }

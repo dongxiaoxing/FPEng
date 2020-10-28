@@ -13,7 +13,7 @@ namespace Face.Web.App.Utils
         public FaceUtil()
         {
             Auth auth = new Auth();
-            auth.SDK_Init();
+            Auth.SDK_Init();
             Console.WriteLine("sdkinit: ");
         }
         public Auth _auth { get; set; }

@@ -12,3 +12,9 @@ G:\Development\Application\testface\testface\testface\obj\x86\Release\testface.c
 G:\Development\Application\testface\testface\testface\obj\x86\Release\testface.csproj.CoreCompileInputs.cache
 G:\Development\Application\testface\testface\testface\obj\x86\Release\testface.exe
 G:\Development\Application\testface\testface\testface\obj\x86\Release\testface.pdb
+C:\Users\dxn1szh\source\repos\FPEng\testface\obj\x86\Release\testface.csproj.CoreCompileInputs.cache
+C:\Users\dxn1szh\source\repos\FPEng\testface\obj\x86\Release\testface.exe
+C:\Users\dxn1szh\source\repos\FPEng\testface\obj\x86\Release\testface.pdb
+C:\Users\dxn1szh\source\repos\FPEng\testface\bin\x86\testface.exe.config
+C:\Users\dxn1szh\source\repos\FPEng\testface\bin\x86\testface.exe
+C:\Users\dxn1szh\source\repos\FPEng\testface\bin\x86\testface.pdb

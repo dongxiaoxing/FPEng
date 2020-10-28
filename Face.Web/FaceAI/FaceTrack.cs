@@ -194,7 +194,7 @@ namespace Face.Web.Core.FaceAI
             vertices = box.Points();
             for (int j = 0; j< 4; j++)
             {
-                Cv2.Line(img, vertices[j], vertices[(j + 1) % 4], color);
+                //Cv2.Line(img, vertices[j], vertices[(j + 1) % 4], color);
             }
         }
         //C#测试usb摄像头实时人脸检测
