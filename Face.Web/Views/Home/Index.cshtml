@@ -16,6 +16,9 @@
         <li class="nav-item">
             <a class="nav-link" id="pills-verify-tab" data-toggle="pill" href="#pills-verify" role="tab" aria-controls="pills-verify" aria-selected="false">识别</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" id="pills-camera-tab" data-toggle="pill" href="#pills-camera" role="tab" aria-controls="pills-camera" aria-selected="false">相机</a>
+        </li>
     </ul>
 
     <div class="tab-content" id="pills-tabContent">
@@ -50,7 +53,7 @@
                 <div class="col-md-6">
                     <p style="text-align:center;">图像预览</p>
                     <div class="col-md-6" style="text-align:center;">
-                        <img id="face_preview1" class="img-responsive" alt="" width="200" height="200">
+                        <img id="face_preview1" class="img-responsive" alt=""  height="200">
                         <p style="text-align:center;">{{ model.name }}</p>
                     </div>
                 </div>
@@ -61,11 +64,6 @@
             <div class="row">
                 <div class="col-md-6">
                     <form enctype="multipart/form-data" v-on:submit.prevent="onSubmit">
-                        <div class="form-group">
-                            <label for="">名字:</label>
-                            <input type="text" required class="form-control" placeholder="小明" name="subject_name" v-model="model.name">
-                        </div>
-
                         <div class="form-group">
                             <label for="">群组:</label>
                             <input type="text" required class="form-control" placeholder="BOSCH" name="subject_name" v-model="model.group">
@@ -87,9 +85,11 @@
                 <div class="col-md-6">
                     <p style="text-align:center;">图像预览</p>
                     <div class="col-md-6" style="text-align:center;">
-                        <img id="face_preview2" class="img-responsive" alt="" width="200" height="200">
+                        <img id="face_preview2" class="img-responsive" alt=""  height="200">
                         <p style="text-align:center;">{{ resultStatus }}</p>
-                    </div>
+                        <p style="text-align:left;">{{ resultName }}</p>
+                        <p style="text-align:left;">{{ resultScore }}</p>
+                     </div>
                 </div>
             </div>
         </div>
@@ -148,7 +148,7 @@
                 axios.post('http://localhost:51846/api/Face/Upload', formData)
                     .then(res => {
                         // Post a status message
-                        this.loading = '';
+                        this.loading = '头像上传完成！';
                         this.uploadStatus = res.data.msg;
                     })
             }
@@ -167,12 +167,18 @@
                 loading: '',
                 resultStatus: '',
                 resultDetails: '',
+                resultName: '',
+                resultGroup: '',
+                resultScore:''
             }
         },
         methods: {
             upload: function (files) {
                 this.model.image = files[0];
                 this.resultStatus = '';
+                this.resultName = '';
+                this.resultGroup = '';
+                this.resultScore = '';
                 this.showPreview(files[0]);
             },
             showPreview: function (file) {
@@ -187,26 +193,20 @@
                 // Assemble form data
                 const formData = new FormData()
                 formData.append('Image', this.model.image);
-                formData.append('UserId', this.model.name);
-                formData.append('GroupId', this.model.group);
+                formData.append('GroupId',this.model.group);
                 this.loading = "头像识别中，请稍等."
                 // Post to server
                 axios.post('http://localhost:51846/api/Face/Verify', formData)
                     .then(res => {
                         // Post a status message saying the upload complete
-                        this.loading = '';
-                        console.log(res);
-                        if (!res.data.Errors) {
-                            if (res.data.images[0].transaction.status != "success") {
-                                this.resultStatus = '😕 don\'t know who you are! Try uploading a picture of yourself first in upload section';
-                            } else {
-                                this.resultStatus = 'What\'s good ' + res.data.images[1].transaction.subject_id + '! 🤓';
-                            }
-                            this.resultDetails = res.data.images[0].transaction;
+                        this.loading = '头像识别完成';
+                        if (res.data.msg == "success") {
+                            this.resultName = "用户名：" + res.data.data.result[0].user_id;
+                            this.resultScore = "匹配度：" + res.data.data.result[0].score;
                         } else {
-                            this.resultStatus = '😕 don\'t know who you are! Try uploading a picture first in upload section';
+                            this.resultStatus = "错误："+res.data.msg;
                         }
-                    })
+                   })
             }
         }
     })

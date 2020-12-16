@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Web;
 using Dapper;
 using Face.Web.Core.FaceAI;
 using Face.Web.Core.Utils;
@@ -10,6 +12,8 @@ using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static Face.Web.Core.Models.Models;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Face.Web.Core.Controllers
 {
@@ -540,26 +544,29 @@ namespace Face.Web.Core.Controllers
         [HttpPost]
         public JObject Verify([FromForm] VerifyModel verifyData)
         {
-            string groupId = verifyData.GroupId;
+            string groupId = verifyData.GroupId == null ? "":verifyData.GroupId;
             string userId = verifyData.UserId == null ? "":verifyData.UserId;
             var image = verifyData.Image;
-            var filePath = Path.Combine("wwwroot/images/verify", verifyData.UserId == null ? "unkown":verifyData.UserId);
+            var filePath = Path.Combine("wwwroot/images/verify", verifyData.UserId == null ? "unkown.png":verifyData.UserId);
 
-            // Saving Image on Server
-            if (image.Length > 0)
+            if (image == null || image.Length == 0)
             {
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    image.CopyTo(fileStream);
-                }
+                //return BadRequest();
             }
+            
+            using (var memoryStream = new MemoryStream())
+            {
+                image.CopyTo(memoryStream);
+                using (var img = Image.FromStream(memoryStream))
+                {
+                    // TODO: ResizeImage(img, 100, 100);
+                    img.Save(filePath, ImageFormat.Png);
+                }
+            }  
 
             string result = faceCompare.FaceIdentify(filePath, groupId,userId); //G:\Development\Application\testface\img\beckham
             var resultJson = JsonConvert.DeserializeObject<JObject>(result);
-            string msg = (string)resultJson["msg"];
-            JObject data = new JObject(new JProperty("msg",msg),
-                                       new JProperty("data")); 
-            return data;
-        }
+            return resultJson;
+          }
     }
 }
