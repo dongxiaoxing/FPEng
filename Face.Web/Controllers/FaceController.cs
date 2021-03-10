@@ -537,17 +537,19 @@ namespace Face.Web.Core.Controllers
         }
         /// <summary>
         /// verify 
-        /// </summary>
-        /// <param name="verifyData"></param>
+        /// </summary> <param name="verifyData"></param>
         /// Verify face image and return best fit user id 
         [Route("Verify")]
         [HttpPost]
         public JObject Verify([FromForm] VerifyModel verifyData)
+        
         {
             string groupId = verifyData.GroupId == null ? "":verifyData.GroupId;
             string userId = verifyData.UserId == null ? "":verifyData.UserId;
             var image = verifyData.Image;
             var filePath = Path.Combine("wwwroot/images/verify", verifyData.UserId == null ? "unkown.png":verifyData.UserId);
+            
+            Console.WriteLine("verify data is:" + groupId + userId);
 
             if (image == null || image.Length == 0)
             {

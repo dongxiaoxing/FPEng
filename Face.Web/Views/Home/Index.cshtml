@@ -93,6 +93,21 @@
                 </div>
             </div>
         </div>
+
+        <div id="pills-camera" class="tab-pane fade">
+            <video id="video" v-bind:width="this.video.width" v-bind:height="this.video.height" preload autoplay loop muted></video>
+            <canvas id="canvas" v-bind:width="this.video.width" v-bind:height="this.video.height"></canvas>
+
+            <div class="buttonDiv">
+                <button class="btn btn-primary" v-on:click="submit()">点击识别</button>
+            </div>
+
+            <div class="resultDiv">
+                <p>用户名：{{resultName}}</p>
+                <p>匹配度：{{resultScore}}</p>
+                <p>识别状态：{{resultStatus}}</p>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -105,6 +120,18 @@
     .app-title {
         text-align: center;
         margin-bottom: 10px;
+    }
+
+    video, canvas {
+        top: 0;
+    }
+
+    .buttonDiv {
+        bottom: 10%;
+    }
+
+    .resultDiv {
+        bottom: 20%
     }
 </style>
 
@@ -210,7 +237,125 @@
             }
         }
     })
+
+    var camera = new Vue({
+        el: '#pills-camera',
+        data: function() {
+            return {
+                model: {
+                    image: null,
+                    group: 'BOSCH',
+                    name: ''
+                },
+                video: {
+                    width: 740,
+                    height: 480
+                },
+                resultName: "",
+                resultScore: "",
+                resultStatus: "",
+                loading: "",
+                submitting: false
+            }
+        },
+        mounted: function() {
+            this.openCamera();
+        },
+        methods: {
+            stopTracking: function () {
+                // 停止侦测
+                this.trackerTask.stop()
+                // 关闭摄像头
+                this.trackerTask.closeCamera()
+            },
+            dataURLtoFile: function (dataurl, filename = "file", type) {
+                let arr = dataurl.split(",");
+                let bstr = atob(arr[1]);
+                !type && (type = arr[0].replace("data:", "").replace(";base64", ""));
+                let n = bstr.length,
+                    u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                return new File([u8arr], filename, {
+                    type
+                });
+            },
+            openCamera() {
+
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } }).then(function (stream) {
+                    document.getElementById('video').srcObject = stream;
+                });
+
+                var canvas = document.getElementById('canvas');
+                var context = canvas.getContext('2d');
+                var ref = this;
+
+                var tracker = new tracking.ObjectTracker('face');
+
+                tracker.setInitialScale(4);
+                tracker.setStepSize(2);
+                tracker.setEdgesDensity(0.1);
+
+                console.log("traker initialized")
+
+                this.trackerTask = tracking.track('#video', tracker, { camera: true });
+
+                tracker.on('track', function (event) {
+
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+
+                    event.data.forEach(function (rect) {
+                        // draw rect angle on face and display result
+                        context.font = '11px Helvetica';
+                        context.strokeStyle = '#a64ceb';
+                        context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+                        if (!ref.submitting && ref.resultStatus != "success") {
+                            ref.submitting = true;
+                            ref.submit()
+                        }
+                    });
+                });
+
+            },
+            submit() {
+                let canvas = document.getElementById('canvas')
+                let context = canvas.getContext('2d')
+                let video = document.getElementById('video')
+
+                // get face image
+                context.drawImage(video, 0, 0, this.video.width, this.video.height)
+                this.model.image = this.dataURLtoFile(canvas.toDataURL(), "image.png");
+
+                const formData = new FormData()
+
+                formData.append('Image', this.model.image);
+                formData.append('GroupId', this.model.group);
+
+                // post to server
+                this.axios.post('http://localhost:51846/api/Face/Verify', formData)
+                    .then(res => {
+                        // Post a status message saying the upload complete
+                        if (res.data.msg == "success") {
+                            this.resultName = res.data.data.result[0].user_id;
+                            this.resultScore = res.data.data.result[0].score;
+                            this.resultStatus = res.data.msg;
+                        } else {
+                            this.resultScore = "";
+                            this.resultName = "";
+                            this.resultStatus = res.data.msg;
+                        }
+
+                        this.submitting = false;
+                    })
+            }
+        },
+        destroyed() {
+            this.stopTracking();
+        }
+    })
 </script>
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>

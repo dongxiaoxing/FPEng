@@ -14147,6 +14147,7 @@
       "Dapper >= 2.0.35",
       "Microsoft.AspNetCore.App >= 2.2.0",
       "Microsoft.AspNetCore.Razor.Design >= 2.2.0",
+      "Microsoft.AspNetCore.StaticFiles >= 2.2.0",
       "Microsoft.Data.Sqlite.Core >= 3.1.5",
       "Microsoft.NETCore.App >= 2.2.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.2.3",
@@ -14212,6 +14213,10 @@
           },
           "Microsoft.AspNetCore.Razor.Design": {
             "suppressParent": "All",
+            "target": "Package",
+            "version": "[2.2.0, )"
+          },
+          "Microsoft.AspNetCore.StaticFiles": {
             "target": "Package",
             "version": "[2.2.0, )"
           },
